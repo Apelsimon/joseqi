@@ -101,9 +101,9 @@ void JoseqiAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock
 	processChain.prepare(spec);
 	processChain.reset();
 
-	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, 150.f, 1.f, bassGain);
-	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 4000.f, 1.f, midGain);
-	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 6000.f, 1.f, trebleGain);
+	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
+	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
+	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
 }
 
 void JoseqiAudioProcessor::releaseResources()
@@ -176,20 +176,65 @@ void JoseqiAudioProcessor::setStateInformation (const void* data, int sizeInByte
 
 void JoseqiAudioProcessor::onBassGainChanged(float newValue)
 {
+	DBG("change bass gain: " << newValue);
 	bassGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
-	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, 150, 1.f, bassGain);
+	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
+}
+
+void JoseqiAudioProcessor::onBassQChanged(float newValue)
+{
+	DBG("change bass Q: " << newValue);
+	bassQ = newValue;
+	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
+}
+
+void JoseqiAudioProcessor::onBassFreqChanged(float newValue)
+{
+	DBG("change bass freq: " << newValue);
+	bassFreq = newValue;
+	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
 }
 
 void JoseqiAudioProcessor::onMidGainChanged(float newValue)
 {
+	DBG("change mid gain: " << newValue);
 	midGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
-	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 4000.f, 1.f, midGain);
+	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
+}
+
+void JoseqiAudioProcessor::onMidQChanged(float newValue)
+{
+	DBG("change mid Q: " << newValue);
+	midQ = newValue;
+	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
+}
+
+void JoseqiAudioProcessor::onMidFreqChanged(float newValue)
+{
+	DBG("change freq gain: " << newValue);
+	midFreq = newValue;
+	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
 }
 
 void JoseqiAudioProcessor::onTrebleGainChanged(float newValue)
 {
+	DBG("change treble gain: " << newValue);
 	trebleGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
-	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 6000.f, 1.f, trebleGain);
+	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
+}
+
+void JoseqiAudioProcessor::onTrebleQChanged(float newValue)
+{
+	DBG("change treble q: " << newValue);
+	trebleQ = newValue;
+	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
+}
+
+void JoseqiAudioProcessor::onTrebleFreqChanged(float newValue)
+{
+	DBG("change treble freq: " << newValue);
+	trebleFreq = newValue;
+	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
 }
 
 //==============================================================================

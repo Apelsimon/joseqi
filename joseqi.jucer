@@ -11,6 +11,8 @@
       <FILE id="DY4LMg" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="eHPG9c" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="F53tzO" name="EqBand.h" compile="0" resource="0" file="Source/EqBand.h"/>
+      <FILE id="NJBphq" name="EqBand.cpp" compile="1" resource="0" file="Source/EqBand.cpp"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

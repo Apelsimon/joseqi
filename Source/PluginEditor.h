@@ -11,6 +11,8 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+
+#include "EqBand.h"
 #include "PluginProcessor.h"
 
 //==============================================================================
@@ -27,15 +29,13 @@ public:
     void resized() override;
 
 private:
-	void initAndPublishSlider(Slider& slider, const String& suffix,
-		const std::function<void()>& onValueChanged);
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     JoseqiAudioProcessor& processor;
 
-	Slider bassKnob;
-	Slider midKnob;
-	Slider trebleKnob;
+	EqBand bassEqBand;
+	EqBand midEqBand;
+	EqBand trebleEqBand;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JoseqiAudioProcessorEditor)
 };
