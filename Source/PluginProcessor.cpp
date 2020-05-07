@@ -176,65 +176,80 @@ void JoseqiAudioProcessor::setStateInformation (const void* data, int sizeInByte
 
 void JoseqiAudioProcessor::onBassGainChanged(float newValue)
 {
-	DBG("change bass gain: " << newValue);
-	bassGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
+	//DBG("change bass gain: " << newValue);
+	bassGain = Decibels::decibelsToGain(newValue);
 	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
 }
 
 void JoseqiAudioProcessor::onBassQChanged(float newValue)
 {
-	DBG("change bass Q: " << newValue);
+	//DBG("change bass Q: " << newValue);
 	bassQ = newValue;
 	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
 }
 
 void JoseqiAudioProcessor::onBassFreqChanged(float newValue)
 {
-	DBG("change bass freq: " << newValue);
+	//DBG("change bass freq: " << newValue);
 	bassFreq = newValue;
 	*processChain.template get<BassFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeLowShelf(sampleRate, bassFreq, bassQ, bassGain);
 }
 
 void JoseqiAudioProcessor::onMidGainChanged(float newValue)
 {
-	DBG("change mid gain: " << newValue);
-	midGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
+	//DBG("change mid gain: " << newValue);
+	midGain = Decibels::decibelsToGain(newValue);
 	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
 }
 
 void JoseqiAudioProcessor::onMidQChanged(float newValue)
 {
-	DBG("change mid Q: " << newValue);
+	//DBG("change mid Q: " << newValue);
 	midQ = newValue;
 	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
 }
 
 void JoseqiAudioProcessor::onMidFreqChanged(float newValue)
 {
-	DBG("change freq gain: " << newValue);
+	//DBG("change freq gain: " << newValue);
 	midFreq = newValue;
 	*processChain.template get<MidFilterIndex>().state = *dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, midFreq, midQ, midGain);
 }
 
 void JoseqiAudioProcessor::onTrebleGainChanged(float newValue)
 {
-	DBG("change treble gain: " << newValue);
-	trebleGain = jmap(newValue, -12.f, 12.f, 0.25f, 4.f);
+	//DBG("change treble gain: " << newValue);
+	trebleGain = Decibels::decibelsToGain(newValue);
 	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
 }
 
 void JoseqiAudioProcessor::onTrebleQChanged(float newValue)
 {
-	DBG("change treble q: " << newValue);
+	//DBG("change treble q: " << newValue);
 	trebleQ = newValue;
 	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
 }
 
 void JoseqiAudioProcessor::onTrebleFreqChanged(float newValue)
 {
-	DBG("change treble freq: " << newValue);
+	//DBG("change treble freq: " << newValue);
 	trebleFreq = newValue;
 	*processChain.template get<TrebleFilterIndex>().state = *dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, trebleFreq, trebleQ, trebleGain);
+}
+
+dsp::IIR::Coefficients<float> JoseqiAudioProcessor::getBassFilterCoeffs()
+{
+	return *processChain.template get<BassFilterIndex>().state;
+}
+
+dsp::IIR::Coefficients<float> JoseqiAudioProcessor::getMidFilterCoeffs()
+{
+	return *processChain.template get<MidFilterIndex>().state;
+}
+
+dsp::IIR::Coefficients<float> JoseqiAudioProcessor::getTrebleFilterCoeffs()
+{
+	return *processChain.template get<TrebleFilterIndex>().state;
 }
 
 //==============================================================================

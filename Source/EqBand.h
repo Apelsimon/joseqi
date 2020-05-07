@@ -20,6 +20,8 @@ public:
     void paint (Graphics&) override;
     void resized() override;
 
+	std::vector<Slider*> getSliders() { return std::vector<Slider*>{&gainKnob, &qKnob, &freqKnob }; }
+
 private:
 	void buildControls();
 	void initAndPublishControl(Slider& slider, const Slider::SliderStyle& sliderStyle, const String& suffix,

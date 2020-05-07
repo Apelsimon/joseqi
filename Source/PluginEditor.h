@@ -13,6 +13,7 @@
 #include "../JuceLibraryCode/JuceHeader.h"
 
 #include "EqBand.h"
+#include "EqGraph.h"
 #include "PluginProcessor.h"
 
 //==============================================================================
@@ -33,6 +34,7 @@ private:
     // access the processor object that created it.
     JoseqiAudioProcessor& processor;
 
+	EqGraph eqGraph;
 	EqBand bassEqBand;
 	EqBand midEqBand;
 	EqBand trebleEqBand;

@@ -68,6 +68,10 @@ public:
 	void onTrebleQChanged(float newValue);
 	void onTrebleFreqChanged(float newValue);
 
+	dsp::IIR::Coefficients<float> getBassFilterCoeffs();
+	dsp::IIR::Coefficients<float> getMidFilterCoeffs();
+	dsp::IIR::Coefficients<float> getTrebleFilterCoeffs();
+
 private:
 
 	enum
@@ -91,7 +95,7 @@ private:
 	float trebleQ{ std::sqrt(2.f) };
 	float trebleFreq{ 6000.f };
 
-	using Filter = dsp::ProcessorDuplicator <dsp::IIR::Filter<float>, dsp::IIR::Coefficients <float>>;
+	using Filter = dsp::ProcessorDuplicator <dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
 	dsp::ProcessorChain<Filter, Filter, Filter> processChain;
 
     //==============================================================================

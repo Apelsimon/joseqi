@@ -48,7 +48,7 @@ void EqBand::buildControls()
 	{
 		eqBandLabel.setText("Bass", NotificationType::dontSendNotification);
 		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() { processor.onBassGainChanged(gainKnob.getValue());  });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", {0.1f, 20.f}, 0.1f, std::sqrt(2.f), [this]() { processor.onBassQChanged(qKnob.getValue());  });
+		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", {0.1f, 10.f}, 0.1f, std::sqrt(2.f), [this]() { processor.onBassQChanged(qKnob.getValue());  });
 		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 100.f, 300.f }, 1.f, 150.f, [this]() { processor.onBassFreqChanged(freqKnob.getValue());  });
 		break;
 	}
@@ -56,7 +56,7 @@ void EqBand::buildControls()
 	{
 		eqBandLabel.setText("Mid", NotificationType::dontSendNotification);
 		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() {  processor.onMidGainChanged(gainKnob.getValue()); });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 20.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onMidQChanged(qKnob.getValue()); });
+		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 10.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onMidQChanged(qKnob.getValue()); });
 		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 300.f, 3000.f }, 1.f, 500.f, [this]() {  processor.onMidFreqChanged(freqKnob.getValue()); });
 		break;
 	}
@@ -64,7 +64,7 @@ void EqBand::buildControls()
 	{
 		eqBandLabel.setText("Treble", NotificationType::dontSendNotification);
 		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() { processor.onTrebleGainChanged(gainKnob.getValue());  });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 20.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onTrebleQChanged(qKnob.getValue()); });
+		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 10.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onTrebleQChanged(qKnob.getValue()); });
 		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 3000.f, 10000.f }, 1.f, 6000.f, [this]() { processor.onTrebleFreqChanged(freqKnob.getValue()); });
 		break;
 	}
