@@ -22,7 +22,7 @@
 class JoseqiAudioProcessorEditor  : public AudioProcessorEditor
 {
 public:
-    JoseqiAudioProcessorEditor (JoseqiAudioProcessor&);
+    JoseqiAudioProcessorEditor (JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters);
     ~JoseqiAudioProcessorEditor();
 
     //==============================================================================

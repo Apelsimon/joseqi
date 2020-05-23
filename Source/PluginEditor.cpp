@@ -12,13 +12,13 @@
 #include "PluginEditor.h"
 
 //==============================================================================
-JoseqiAudioProcessorEditor::JoseqiAudioProcessorEditor (JoseqiAudioProcessor& p)
+JoseqiAudioProcessorEditor::JoseqiAudioProcessorEditor (JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters)
     : AudioProcessorEditor (&p), 
 	processor (p),
-	eqGraph(p),
-	bassEqBand(p, EqBand::Type::Bass),
-	midEqBand(p, EqBand::Type::Mid),
-	trebleEqBand(p, EqBand::Type::Treble)
+	eqGraph(p, parameters),
+	bassEqBand(p, parameters, EqBand::Type::Bass),
+	midEqBand(p, parameters, EqBand::Type::Mid),
+	trebleEqBand(p, parameters, EqBand::Type::Treble)
 {
     setSize (2 * 400, 2 * 300);
 	addAndMakeVisible(eqGraph);
@@ -26,9 +26,9 @@ JoseqiAudioProcessorEditor::JoseqiAudioProcessorEditor (JoseqiAudioProcessor& p)
 	addAndMakeVisible(midEqBand);
 	addAndMakeVisible(trebleEqBand);
 
-	eqGraph.addSliders(bassEqBand.getSliders());
+	/*eqGraph.addSliders(bassEqBand.getSliders());
 	eqGraph.addSliders(midEqBand.getSliders());
-	eqGraph.addSliders(trebleEqBand.getSliders());
+	eqGraph.addSliders(trebleEqBand.getSliders());*/
 }
 
 JoseqiAudioProcessorEditor::~JoseqiAudioProcessorEditor()

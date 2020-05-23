@@ -17,10 +17,10 @@
 //==============================================================================
 /*
 */
-class EqGraph    : public Component, public Slider::Listener
+class EqGraph    : public Component, public AudioProcessorValueTreeState::Listener
 {
 public:
-    EqGraph(JoseqiAudioProcessor& p);
+    EqGraph(JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters);
     ~EqGraph();
 
 	// ==============================================================
@@ -30,15 +30,13 @@ public:
 
 	// ==============================================================
 
-	void 	sliderValueChanged(Slider* slider) override;
+	void parameterChanged(const String &parameterID, float newValue) override;
 
 	// ==============================================================
 
-	void addSliders(const std::vector<Slider*>& newSliders);
-
 private:
 	JoseqiAudioProcessor& processor;
-	std::vector<Slider*> sliders;
+
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EqGraph)
 };

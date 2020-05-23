@@ -4,6 +4,8 @@
 
 #include "PluginProcessor.h"
 
+#include <memory>
+
 class EqBand    : public Component
 {
 public:
@@ -14,7 +16,7 @@ public:
 		Treble
 	};
 
-    EqBand(JoseqiAudioProcessor& p, Type t);
+    EqBand(JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters, Type t);
     ~EqBand();
 
     void paint (Graphics&) override;
@@ -24,15 +26,19 @@ public:
 
 private:
 	void buildControls();
-	void initAndPublishControl(Slider& slider, const Slider::SliderStyle& sliderStyle, const String& suffix,
-		Range<double> range, float rangeDelta, float defaultValue, const std::function<void()>& onValueChanged);
+	void initAndPublishControl(Slider& slider, const Slider::SliderStyle& sliderStyle, const String& suffix);
 
+	AudioProcessorValueTreeState& parameters;
+	
 	Type type;
 
 	Label eqBandLabel;
 	Slider gainKnob;
 	Slider qKnob;
 	Slider freqKnob;
+	std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> gainAttachment;
+	std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> qAttachment;
+	std::unique_ptr<AudioProcessorValueTreeState::SliderAttachment> freqAttachment;
 
 	JoseqiAudioProcessor& processor;
 

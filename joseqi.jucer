@@ -15,6 +15,7 @@
       <FILE id="NJBphq" name="EqBand.cpp" compile="1" resource="0" file="Source/EqBand.cpp"/>
       <FILE id="CJ0iEf" name="EqGraph.cpp" compile="1" resource="0" file="Source/EqGraph.cpp"/>
       <FILE id="rFdVUT" name="EqGraph.h" compile="0" resource="0" file="Source/EqGraph.h"/>
+      <FILE id="EugDQ4" name="EqParameters.h" compile="0" resource="0" file="Source/EqParameters.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>

@@ -1,20 +1,12 @@
-/*
-  ==============================================================================
-
-    EqGraph.cpp
-    Created: 4 May 2020 7:21:08pm
-    Author:  Apelsimon
-
-  ==============================================================================
-*/
-
-#include "../JuceLibraryCode/JuceHeader.h"
 #include "EqGraph.h"
 
+#include "EqParameters.h"
+
 //==============================================================================
-EqGraph::EqGraph(JoseqiAudioProcessor& p) :
+EqGraph::EqGraph(JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters) :
 	processor(p)
 {
+	EqParameters::addEqParametersListener(parameters, this);
 }
 
 EqGraph::~EqGraph()
@@ -117,20 +109,10 @@ void EqGraph::resized()
     // components that your component contains..
 }
 
-void EqGraph::sliderValueChanged(Slider* slider)
+void EqGraph::parameterChanged(const String &parameterID, float newValue)
 {
-	auto res = std::find_if(sliders.begin(), sliders.end(), [slider](auto s) { return s == slider; });
-	if (res != sliders.end())
-	{
-		repaint();
-	}
+	DBG("param change");
+	repaint();
 }
 
-void EqGraph::addSliders(const std::vector<Slider*>& newSliders)
-{
-	for (auto newSlider : newSliders)
-	{
-		newSlider->addListener(this);
-		sliders.push_back(newSlider);
-	}
-}
+

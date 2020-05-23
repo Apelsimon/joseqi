@@ -15,7 +15,7 @@
 //==============================================================================
 /**
 */
-class JoseqiAudioProcessor  : public AudioProcessor
+class JoseqiAudioProcessor  : public AudioProcessor, public AudioProcessorValueTreeState::Listener
 {
 public:
     //==============================================================================
@@ -56,17 +56,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 	//==============================================================================
-	void onBassGainChanged(float newValue);
-	void onBassQChanged(float newValue);
-	void onBassFreqChanged(float newValue);
+	 
+	void parameterChanged(const String &parameterID, float newValue) override;
 
-	void onMidGainChanged(float newValue);
-	void onMidQChanged(float newValue);
-	void onMidFreqChanged(float newValue);
-
-	void onTrebleGainChanged(float newValue);
-	void onTrebleQChanged(float newValue);
-	void onTrebleFreqChanged(float newValue);
+	//==============================================================================
 
 	dsp::IIR::Coefficients<float> getBassFilterCoeffs();
 	dsp::IIR::Coefficients<float> getMidFilterCoeffs();
@@ -81,22 +74,36 @@ private:
 		TrebleFilterIndex
 	};
 
+	void onBassGainChanged(float newValue);
+	void onBassQChanged(float newValue);
+	void onBassFreqChanged(float newValue);
+
+	void onMidGainChanged(float newValue);
+	void onMidQChanged(float newValue);
+	void onMidFreqChanged(float newValue);
+
+	void onTrebleGainChanged(float newValue);
+	void onTrebleQChanged(float newValue);
+	void onTrebleFreqChanged(float newValue);
+
 	float sampleRate{ 44100.f };
-
-	float bassGain{ 1.f };
-	float bassQ{ std::sqrt(2.f) };
-	float bassFreq{ 150.f };
-
-	float midGain{ 1.f };
-	float midQ{ std::sqrt(2.f) };
-	float midFreq{ 500.f };
-
-	float trebleGain{ 1.f };
-	float trebleQ{ std::sqrt(2.f) };
-	float trebleFreq{ 6000.f };
 
 	using Filter = dsp::ProcessorDuplicator <dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
 	dsp::ProcessorChain<Filter, Filter, Filter> processChain;
+	
+	AudioProcessorValueTreeState parameters;
+	
+	float bassGain;
+	float bassQ;
+	float bassFreq;
+
+	float midGain;
+	float midQ;
+	float midFreq;
+
+	float trebleGain;
+	float trebleQ;
+	float trebleFreq;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (JoseqiAudioProcessor)

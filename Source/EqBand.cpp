@@ -1,11 +1,12 @@
 #include "EqBand.h"
 
-#include "../JuceLibraryCode/JuceHeader.h"
+#include "EqParameters.h"
 
 #include <cmath>
 
 //==============================================================================
-EqBand::EqBand(JoseqiAudioProcessor& p, Type t) :
+EqBand::EqBand(JoseqiAudioProcessor& p, AudioProcessorValueTreeState& parameters, Type t) :
+	parameters(parameters),
 	type(t),
 	gainKnob(),
 	qKnob(),
@@ -41,46 +42,56 @@ void EqBand::resized()
 void EqBand::buildControls()
 {
 	eqBandLabel.setJustificationType(Justification::centred);
+	addAndMakeVisible(eqBandLabel);
 
+	initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " db");
+	initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " q");
+	initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " hz");
+
+	const String* gainId;
+	const String* qId;
+	const String* freqId;
+	
 	switch (type)
 	{
 	case Type::Bass:
 	{
 		eqBandLabel.setText("Bass", NotificationType::dontSendNotification);
-		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() { processor.onBassGainChanged(gainKnob.getValue());  });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", {0.1f, 10.f}, 0.1f, std::sqrt(2.f), [this]() { processor.onBassQChanged(qKnob.getValue());  });
-		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 100.f, 300.f }, 1.f, 150.f, [this]() { processor.onBassFreqChanged(freqKnob.getValue());  });
+		gainId = &EqParameters::BassGainId;
+		qId = &EqParameters::BassQId;
+		freqId = &EqParameters::BassFreqId;
 		break;
 	}
 	case Type::Mid:
 	{
 		eqBandLabel.setText("Mid", NotificationType::dontSendNotification);
-		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() {  processor.onMidGainChanged(gainKnob.getValue()); });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 10.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onMidQChanged(qKnob.getValue()); });
-		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 300.f, 3000.f }, 1.f, 500.f, [this]() {  processor.onMidFreqChanged(freqKnob.getValue()); });
+		gainId = &EqParameters::MidGainId;
+		qId = &EqParameters::MidQId;
+		freqId = &EqParameters::MidFreqId;
 		break;
 	}
 	case Type::Treble:
 	{
 		eqBandLabel.setText("Treble", NotificationType::dontSendNotification);
-		initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " dB", { -12.f, 12.f }, 0.1f, 0.f, [this]() { processor.onTrebleGainChanged(gainKnob.getValue());  });
-		initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " Q", { 0.1f, 10.f }, 0.1f, std::sqrt(2.f), [this]() { processor.onTrebleQChanged(qKnob.getValue()); });
-		initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " Hz", { 3000.f, 10000.f }, 1.f, 6000.f, [this]() { processor.onTrebleFreqChanged(freqKnob.getValue()); });
+		gainId = &EqParameters::TrebleGainId;
+		qId = &EqParameters::TrebleQId;
+		freqId = &EqParameters::TrebleFreqId;
 		break;
 	}
 	}
 
-	addAndMakeVisible(eqBandLabel);
+	gainAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(
+		parameters, *gainId, gainKnob);
+	qAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(
+		parameters, *qId, qKnob);
+	freqAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(
+		parameters, *freqId, freqKnob);
 }
 
-void EqBand::initAndPublishControl(Slider& slider, const Slider::SliderStyle& sliderStyle, const String& suffix, 
-	Range<double> range, float rangeDelta, float defaultValue, const std::function<void()>& onValueChanged)
+void EqBand::initAndPublishControl(Slider& slider, const Slider::SliderStyle& sliderStyle, const String& suffix)
 {
 	addAndMakeVisible(slider);
 	slider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxBelow, true, 60, 30);
-	slider.setRange(range, rangeDelta);
-	slider.setValue(defaultValue);
 	slider.setTextValueSuffix(suffix);
 	slider.setSliderStyle(sliderStyle);
-	slider.onValueChange = onValueChanged;
 }
