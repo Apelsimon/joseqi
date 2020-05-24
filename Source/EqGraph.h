@@ -35,6 +35,8 @@ public:
 	// ==============================================================
 
 private:
+	String getFrequencyString(int freq);
+
 	JoseqiAudioProcessor& processor;
 
 

@@ -34,7 +34,7 @@ void EqBand::resized()
 	auto bandBounds = getLocalBounds();
 	
 	eqBandLabel.setBounds(bandBounds.removeFromTop(height * 0.1f));
-	gainKnob.setBounds(bandBounds.removeFromTop(height * 2.f / 3.f));
+	gainKnob.setBounds(bandBounds.removeFromTop(height * 0.5f));
 	freqKnob.setBounds(bandBounds.removeFromLeft(width / 2.f));
 	qKnob.setBounds(bandBounds);
 }
@@ -44,7 +44,7 @@ void EqBand::buildControls()
 	eqBandLabel.setJustificationType(Justification::centred);
 	addAndMakeVisible(eqBandLabel);
 
-	initAndPublishControl(gainKnob, Slider::SliderStyle::LinearVertical, " db");
+	initAndPublishControl(gainKnob, Slider::SliderStyle::RotaryVerticalDrag, " db");
 	initAndPublishControl(qKnob, Slider::SliderStyle::RotaryVerticalDrag, " q");
 	initAndPublishControl(freqKnob, Slider::SliderStyle::RotaryVerticalDrag, " hz");
 

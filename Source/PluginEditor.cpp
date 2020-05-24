@@ -25,10 +25,6 @@ JoseqiAudioProcessorEditor::JoseqiAudioProcessorEditor (JoseqiAudioProcessor& p,
 	addAndMakeVisible(bassEqBand);
 	addAndMakeVisible(midEqBand);
 	addAndMakeVisible(trebleEqBand);
-
-	/*eqGraph.addSliders(bassEqBand.getSliders());
-	eqGraph.addSliders(midEqBand.getSliders());
-	eqGraph.addSliders(trebleEqBand.getSliders());*/
 }
 
 JoseqiAudioProcessorEditor::~JoseqiAudioProcessorEditor()
@@ -45,7 +41,7 @@ void JoseqiAudioProcessorEditor::paint (Graphics& g)
 void JoseqiAudioProcessorEditor::resized()
 {
 	auto bounds = getBounds();
-	auto eqBandbounds = bounds.removeFromBottom(getHeight() / 2.f);
+	auto eqBandbounds = bounds.removeFromBottom(getHeight() / 3.f);
 	const auto eqBandWidth = eqBandbounds.getWidth() / 3.f;
 
 	eqGraph.setBounds(bounds);
