@@ -127,17 +127,35 @@ void EqGraph::paint (Graphics& g)
 			treblePath.lineTo(x, trebleY);
 		}
 		
-	}
-	
-	const auto strokeType = PathStrokeType{ 3.f };
-	g.setColour(Colours::blue);
-	g.strokePath(bassPath, strokeType);
-	
-	g.setColour(Colours::green);
-	g.strokePath(midPath, strokeType);
+	} 
+	 
+	const auto middle = top + height / 2.f;
 
-	g.setColour(Colours::red);
-	g.strokePath(treblePath, strokeType);
+	auto createPathToFill = [left, middle, right](const auto& path) {
+		Path pathToFill{ path };
+		pathToFill.lineTo(right, middle);
+		pathToFill.lineTo(left, middle);
+		pathToFill.closeSubPath();
+		return pathToFill;
+	};
+
+	auto bassPathToFill = createPathToFill(bassPath);
+	auto midPathToFill = createPathToFill(midPath);
+	auto treblePathToFill = createPathToFill(treblePath);
+
+	auto strokeAndFillPath = [&g](const auto& path, const auto& pathToFill, Colour colur) {
+		const auto strokeType = PathStrokeType{ 2.f };
+		constexpr auto Opacity = 0.3f;
+
+		g.setColour(colur);
+		g.strokePath(path, strokeType);
+		g.setOpacity(Opacity);
+		g.fillPath(pathToFill);
+	};
+
+	strokeAndFillPath(bassPath, bassPathToFill, Colours::blue);
+	strokeAndFillPath(midPath, midPathToFill, Colours::green);
+	strokeAndFillPath(treblePath, treblePathToFill, Colours::red);
 }
 
 void EqGraph::resized()
