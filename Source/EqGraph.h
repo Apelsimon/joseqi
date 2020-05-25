@@ -38,7 +38,8 @@ private:
 	String getFrequencyString(int freq);
 
 	JoseqiAudioProcessor& processor;
-
+	std::vector<float> baseFrequencies;
+	std::vector<float> incrementalFrequencies;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EqGraph)
 };

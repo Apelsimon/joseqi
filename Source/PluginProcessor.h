@@ -74,6 +74,8 @@ private:
 		TrebleFilterIndex
 	};
 
+	void initFilters();
+
 	void onBassGainChanged(float newValue);
 	void onBassQChanged(float newValue);
 	void onBassFreqChanged(float newValue);
@@ -86,13 +88,13 @@ private:
 	void onTrebleQChanged(float newValue);
 	void onTrebleFreqChanged(float newValue);
 
-	float sampleRate{ 44100.f };
-
 	using Filter = dsp::ProcessorDuplicator <dsp::IIR::Filter<float>, dsp::IIR::Coefficients<float>>;
 	dsp::ProcessorChain<Filter, Filter, Filter> processChain;
 	
 	AudioProcessorValueTreeState parameters;
-	
+ 
+	float sampleRate;
+
 	float bassGain;
 	float bassQ;
 	float bassFreq;
