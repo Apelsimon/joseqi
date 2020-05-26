@@ -94,6 +94,14 @@ void EqGraph::paint (Graphics& g)
 	auto midFilterCoeffs = processor.getMidFilterCoeffs();
 	auto trebleFilterCoeffs = processor.getTrebleFilterCoeffs();
 
+	constexpr auto SampleFrequency = 44100.f; // TODO: get from processor
+
+	auto mapFrequencyToYCoordinate = [MinDb, MaxDb, width, bottom, top, SampleFrequency](auto freq, const auto& filterCoefs) {
+		auto gain = filterCoefs.getMagnitudeForFrequency(freq, SampleFrequency);
+		auto db = jlimit<float>(MinDb, MaxDb, Decibels::gainToDecibels(gain));
+		return jmap<float>(db, MinDb, MaxDb, bottom, top);
+	};
+
 	Path bassPath;
 	Path midPath;
 	Path treblePath;
@@ -101,18 +109,10 @@ void EqGraph::paint (Graphics& g)
 	for(auto x = left; x < right; ++x)
 	{
 		const float freq = minFreq * std::pow((maxFreq / minFreq), ((x - left) / static_cast<float>(width)));
-		
-		auto bassGain = bassFilterCoeffs.getMagnitudeForFrequency(freq, 44100.f);
-		auto midGain = midFilterCoeffs.getMagnitudeForFrequency(freq, 44100.f);
-		auto trebleGain = trebleFilterCoeffs.getMagnitudeForFrequency(freq, 44100.f);
-		
-		auto bassDb = jlimit<float>(MinDb, MaxDb, Decibels::gainToDecibels(bassGain));
-		auto midDb = jlimit<float>(MinDb, MaxDb, Decibels::gainToDecibels(midGain));
-		auto trebleDb = jlimit<float>(MinDb, MaxDb, Decibels::gainToDecibels(trebleGain));
-		
-		auto bassY = jmap<float>(bassDb, MinDb, MaxDb, bottom, top);
-		auto midY = jmap<float>(midDb, MinDb, MaxDb, bottom, top);
-		auto trebleY = jmap<float>(trebleDb, MinDb, MaxDb, bottom, top);
+
+		auto bassY = mapFrequencyToYCoordinate(freq, bassFilterCoeffs);
+		auto midY = mapFrequencyToYCoordinate(freq, midFilterCoeffs);
+		auto trebleY = mapFrequencyToYCoordinate(freq, trebleFilterCoeffs);
 
 		if(x == left)
 		{
@@ -126,7 +126,6 @@ void EqGraph::paint (Graphics& g)
 			midPath.lineTo(x, midY);
 			treblePath.lineTo(x, trebleY);
 		}
-		
 	} 
 	 
 	const auto middle = top + height / 2.f;
@@ -143,11 +142,11 @@ void EqGraph::paint (Graphics& g)
 	auto midPathToFill = createPathToFill(midPath);
 	auto treblePathToFill = createPathToFill(treblePath);
 
-	auto strokeAndFillPath = [&g](const auto& path, const auto& pathToFill, Colour colur) {
+	auto strokeAndFillPath = [&g](const auto& path, const auto& pathToFill, auto colour) {
 		const auto strokeType = PathStrokeType{ 2.f };
 		constexpr auto Opacity = 0.3f;
 
-		g.setColour(colur);
+		g.setColour(colour);
 		g.strokePath(path, strokeType);
 		g.setOpacity(Opacity);
 		g.fillPath(pathToFill);
