@@ -94,10 +94,10 @@ void EqGraph::paint (Graphics& g)
 	auto midFilterCoeffs = processor.getMidFilterCoeffs();
 	auto trebleFilterCoeffs = processor.getTrebleFilterCoeffs();
 
-	constexpr auto SampleFrequency = 44100.f; // TODO: get from processor
+	const auto sampleRate = processor.getSampleRate();
 
-	auto mapFrequencyToYCoordinate = [MinDb, MaxDb, width, bottom, top, SampleFrequency](auto freq, const auto& filterCoefs) {
-		auto gain = filterCoefs.getMagnitudeForFrequency(freq, SampleFrequency);
+	auto mapFrequencyToYCoordinate = [MinDb, MaxDb, width, bottom, top, sampleRate](auto freq, const auto& filterCoefs) {
+		auto gain = filterCoefs.getMagnitudeForFrequency(freq, sampleRate);
 		auto db = jlimit<float>(MinDb, MaxDb, Decibels::gainToDecibels(gain));
 		return jmap<float>(db, MinDb, MaxDb, bottom, top);
 	};

@@ -61,10 +61,11 @@ public:
 
 	//==============================================================================
 
+	float getSampleRate() const { return sampleRate; }
 	dsp::IIR::Coefficients<float> getBassFilterCoeffs();
 	dsp::IIR::Coefficients<float> getMidFilterCoeffs();
 	dsp::IIR::Coefficients<float> getTrebleFilterCoeffs();
-
+	
 private:
 
 	enum
@@ -93,7 +94,7 @@ private:
 	
 	AudioProcessorValueTreeState parameters;
  
-	float sampleRate;
+	std::atomic<float> sampleRate;
 
 	float bassGain;
 	float bassQ;
