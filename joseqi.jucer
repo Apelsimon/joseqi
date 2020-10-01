@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="dWn2oL" name="joseqi" projectType="audioplug" jucerVersion="5.4.3"
-              pluginManufacturer="jos" pluginVST3Category="EQ" cppLanguageStandard="17">
+<JUCERPROJECT id="dWn2oL" name="joseqi" projectType="audioplug" pluginManufacturer="jos"
+              pluginVST3Category="EQ" cppLanguageStandard="17" displaySplashScreen="1"
+              jucerFormatVersion="1">
   <MAINGROUP id="muuR9x" name="joseqi">
     <GROUP id="{566B545A-FEBD-0211-210D-373344B1C426}" name="Source">
       <FILE id="Hpj5gX" name="PluginProcessor.cpp" compile="1" resource="0"
